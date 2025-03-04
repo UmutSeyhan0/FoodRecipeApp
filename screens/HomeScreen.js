@@ -4,6 +4,7 @@ import tw, { style } from 'twrnc';
 //import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {BellIcon, MagnifyingGlassIcon} from 'react-native-heroicons/outline'
+import Categories from '../components/Categories'
 
 
 export default function HomeScreen() {
@@ -40,13 +41,13 @@ export default function HomeScreen() {
     <View style={tw`bg-white rounded-full p-3`}>
       <MagnifyingGlassIcon size={hp(2.5)} strokeWidth={3} color="gray" />
     </View>
-
-
-
     </View>
 
-    </ScrollView>
-     
+    <View>
+
+      <Categories/>
     </View>
+  </ScrollView>
+ </View>
   )
 }
