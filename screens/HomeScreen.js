@@ -1,20 +1,43 @@
 import { View, Image, StatusBar, ScrollView, Text, TextInput } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import tw, { style } from 'twrnc';
 //import { ScrollView } from 'react-native-reanimated/lib/typescript/Animated';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {BellIcon, MagnifyingGlassIcon} from 'react-native-heroicons/outline'
 import Categories from '../components/Categories'
+import axios from 'axios';
+import Recipes from '../components/recipes'
 
 
 export default function HomeScreen() {
+
+  const [activeCategory, setActiveCategory] = useState('Beef');
+  const [categories, setCategories] = useState([]);
+
+  useEffect(()=> {
+    getCategories();
+  }, [])
+
+  const getCategories = async ()=>{
+    try{
+      const response = await axios.get('https://themealdb.com/api/json/v1/1/categories.php')
+      //console.log('got categories:', response.data)
+    if(response && response.data){
+      setCategories(response.data.categories)
+    }
+    }catch(err){
+      console.log('error: ', err.message);
+    }
+
+  }
+
   return (
     <View style={tw`flex-1 bg-white`}>
     <StatusBar style="dark "/>
     <ScrollView
     showsVerticalScrollIndicator={false}
     contentContainerStyle={{paddingBottom : 50}}
-    style={tw`space-y-6 pt-14`}
+    style={tw`ml-1 pt-14`}
     >
 
     <View style={tw`mx-4 flex-row justify-between items-center mb-2`}>
@@ -22,7 +45,7 @@ export default function HomeScreen() {
     <BellIcon size={ hp(4)} color="gray"/>
     </View>
 
-    <View style={tw`mx-4 space-y-2 mb-2`}>
+    <View style={tw`mx-4 ml-2 mb-2`}>
       <Text  style={[{fontSize: hp(1.7)}, tw` text-neutral-600`]}>Hello, Umut!</Text>
       <View>
       <Text style={[{fontSize: hp(3.8)}, tw`font-semibold text-neutral-600`]}>Make your own food,</Text>
@@ -45,8 +68,13 @@ export default function HomeScreen() {
 
     <View>
 
-      <Categories/>
+      { categories.length>0 && <Categories categories={categories} activeCategory={activeCategory} setActiveCategory={setActiveCategory}/>}
     </View>
+
+    <View>
+      <Recipes/>
+    </View>
+
   </ScrollView>
  </View>
   )
